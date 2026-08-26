@@ -1,4 +1,4 @@
 window.QUALITY_SUMMARY_CONFIG = {
-  supabaseUrl: 'https://YOUR-PROJECT.supabase.co',
-  supabasePublishableKey: 'YOUR_SUPABASE_PUBLISHABLE_KEY'
+  supabaseUrl: 'https://rdvqpxsmmgcbdjlolcni.supabase.co',
+  supabasePublishableKey: 'sb_publishable_qQjzWCHM-hwxm9uEHA1PqQ_L9NNSDu8'
 };
