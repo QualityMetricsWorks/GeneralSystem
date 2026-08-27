@@ -1,22 +1,17 @@
-import {state,getPart,getRun,getDefect,getShift} from './state.js?v=1.5.0.8';
+import {state,getPart,getRun,getDefect,getShift} from './state.js?v=1.4.8.9';
 export function scrapQtyForRun(runId){return state.scrapEvents.filter(e=>e.runId===runId&&e.disposition==='scrap').reduce((s,e)=>s+Number(e.quantity||0),0)}
 export function copqForEvent(e){const run=getRun(e.runId),part=getPart(run?.partId);return e.disposition==='scrap'?Math.max(0,Number(e.quantity||0)*(Number(part?.costPerPiece||0)-Number(part?.scrapCostPerPiece||0))+Number(e.extraCost||0)):Number(e.extraCost||0)}
 export function metricsForRuns(runs){
  const ids=new Set(runs.map(r=>r.id));const events=state.scrapEvents.filter(e=>ids.has(e.runId));
  const produced=runs.reduce((s,r)=>s+Number(r.produced||0),0);
  const scrap=events.filter(e=>e.disposition==='scrap').reduce((s,e)=>s+Number(e.quantity||0),0);
- const byPart=new Map();
- runs.forEach(r=>{const a=byPart.get(r.partId)||[];a.push(r);byPart.set(r.partId,a)});
- const fgRuns=runs.filter(r=>{const ops=state.operations.filter(o=>o.partId===r.partId);const fg=ops.filter(o=>o.isFinishGood);return fg.length?fg.some(o=>o.id===r.operationId):true});
- const fgIds=new Set(fgRuns.map(r=>r.id));
- const copqEvents=events.filter(e=>fgIds.has(e.runId));
- const copq=copqEvents.reduce((s,e)=>s+copqForEvent(e),0);
- const productionValue=fgRuns.reduce((s,r)=>{const p=getPart(r.partId);return s+Number(r.produced||0)*Number(p?.costPerPiece||0)},0);
+ const copq=events.reduce((s,e)=>s+copqForEvent(e),0);
+ const productionValue=runs.reduce((s,r)=>{const p=getPart(r.partId);return s+Number(r.produced||0)*Number(p?.costPerPiece||0)},0);
  const copqPercent=productionValue?copq/productionValue*100:0;
  return {produced,scrap,scrapRate:produced?scrap/produced*100:0,ppm:produced?scrap/produced*1e6:0,yieldRate:produced?(produced-scrap)/produced*100:100,copq,copqPercent,productionValue};
 }
 export function filteredRuns({start='',end='',clientId='',partId=''}={}){
- return state.runs.filter(r=>(!start||r.date>=start)&&(!end||r.date<=end)&&(!clientId||(r.clientId===clientId||getPart(r.partId)?.clientId===clientId))&&(!partId||r.partId===partId));
+ return state.runs.filter(r=>(!start||r.date>=start)&&(!end||r.date<=end)&&(!clientId||r.clientId===clientId)&&(!partId||r.partId===partId));
 }
 export function defectPareto(runs){
  const ids=new Set(runs.map(r=>r.id)),m=new Map();
