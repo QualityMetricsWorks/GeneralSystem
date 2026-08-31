@@ -88,3 +88,18 @@ Supported:
 - Deactivate user.
 
 Database authorization is authoritative.
+
+
+## v0.0.2.3 — User Invitation & Creation
+
+Adds controlled user invitations.
+
+New database SQL:
+- `sql/08_user_invitation_lifecycle.sql`
+- `sql/08a_user_invitation_validation.sql`
+
+New server-side component:
+- `supabase/functions/invite-company-user/index.ts`
+
+Important: deployment of the Edge Function is required before the Invite User
+button can successfully create users.

@@ -1,7 +1,8 @@
 import {
   getCompanyUsers,
   updateCompanyUserRole,
-  setCompanyUserStatus
+  setCompanyUserStatus,
+  inviteCompanyUser
 } from "../../services/users.service.js";
 
 const ROLE_LABELS = {
@@ -38,6 +39,10 @@ function formatDate(value) {
 }
 
 function canAccess(identity) {
+  return ["administrator", "manager"].includes(identity?.role);
+}
+
+function canInvite(identity) {
   return ["administrator", "manager"].includes(identity?.role);
 }
 
@@ -200,6 +205,99 @@ function openUserDialog(user, identity) {
   return dialog;
 }
 
+
+function openInviteDialog(identity) {
+  const dialog = document.createElement("div");
+  dialog.className = "user-dialog-backdrop";
+
+  const roles = allowedRoles(identity);
+  dialog.innerHTML = `
+    <div class="user-dialog" role="dialog" aria-modal="true">
+      <div class="user-dialog-header">
+        <div>
+          <p class="eyebrow">User invitation</p>
+          <h2>Invite company user</h2>
+          <p class="muted">The user will receive a secure Supabase invitation email.</p>
+        </div>
+        <button class="dialog-close" type="button" aria-label="Close">×</button>
+      </div>
+
+      <form id="invite-user-form">
+        <label>
+          Full name
+          <input name="displayName" type="text" autocomplete="name" required maxlength="120">
+        </label>
+
+        <label>
+          Email
+          <input name="email" type="email" autocomplete="email" required maxlength="255">
+        </label>
+
+        <label>
+          Role
+          <select name="role" required>
+            ${roles.map(role => `<option value="${role}">${ROLE_LABELS[role]}</option>`).join("")}
+          </select>
+        </label>
+
+        <div class="invitation-info">
+          The invitation is automatically assigned to the current company.
+          The company cannot be selected from this form.
+        </div>
+
+        <div id="invite-message" class="user-action-message"></div>
+
+        <div class="user-dialog-actions">
+          <button class="secondary-button" type="button" data-close>Cancel</button>
+          <button class="primary-button" type="submit">Send invitation</button>
+        </div>
+      </form>
+    </div>`;
+
+  function close() {
+    dialog.remove();
+  }
+
+  dialog.addEventListener("click", event => {
+    if (event.target === dialog) close();
+  });
+  dialog.querySelector(".dialog-close").onclick = close;
+  dialog.querySelector("[data-close]").onclick = close;
+
+  dialog.querySelector("#invite-user-form").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const message = dialog.querySelector("#invite-message");
+    const submit = form.querySelector('[type="submit"]');
+
+    submit.disabled = true;
+    message.className = "user-action-message";
+    message.textContent = "Creating secure invitation...";
+
+    try {
+      const result = await inviteCompanyUser({
+        displayName: form.displayName.value.trim(),
+        email: form.email.value.trim(),
+        role: form.role.value
+      });
+
+      message.className = "user-action-message success";
+      message.textContent = `Invitation created for ${result.email}.`;
+
+      dialog.dispatchEvent(new CustomEvent("user-invited", { bubbles: true }));
+      setTimeout(close, 900);
+    } catch (error) {
+      console.error(error);
+      message.className = "user-action-message error";
+      message.textContent = error.message || "Unable to create invitation.";
+      submit.disabled = false;
+    }
+  });
+
+  return dialog;
+}
+
 export async function renderUsersModule(container, { identity }) {
   if (!canAccess(identity)) {
     container.innerHTML = `
@@ -223,7 +321,10 @@ export async function renderUsersModule(container, { identity }) {
           <h1>Users</h1>
           <p class="muted">Manage user roles and access within your company.</p>
         </div>
-        <div class="read-only-note">USER ACTIONS · v0.0.2.2</div>
+        <div class="users-heading-actions">
+          ${canInvite(identity) ? `<button id="invite-user-button" class="primary-button" type="button">Invite user</button>` : ""}
+          <div class="read-only-note">INVITATIONS · v0.0.2.3</div>
+        </div>
       </div>
 
       <div id="users-content"><div class="loading">Loading users...</div></div>
@@ -265,6 +366,15 @@ export async function renderUsersModule(container, { identity }) {
             <tbody id="users-table-body"></tbody>
           </table>
         </div>`;
+
+      const inviteButton = container.querySelector("#invite-user-button");
+      if (inviteButton) {
+        inviteButton.onclick = () => {
+          const dialog = openInviteDialog(identity);
+          document.body.appendChild(dialog);
+          dialog.addEventListener("user-invited", load, { once: true });
+        };
+      }
 
       const search = content.querySelector("#users-search");
       const roleFilter = content.querySelector("#users-role-filter");

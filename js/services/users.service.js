@@ -23,3 +23,18 @@ export async function setCompanyUserStatus(userId, status) {
   if (error) throw error;
   return data;
 }
+
+
+export async function inviteCompanyUser({ displayName, email, role }) {
+  const { data, error } = await supabase.functions.invoke("invite-company-user", {
+    body: {
+      display_name: displayName,
+      email,
+      role
+    }
+  });
+
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+  return data;
+}

@@ -321,3 +321,41 @@
 .user-action-message.error {
   color: #a43b3b;
 }
+
+
+/* ============================================================
+   GUVEL v0.0.2.3 — User Invitations
+   ============================================================ */
+
+.users-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#invite-user-form input {
+  width: 100%;
+  min-height: 42px;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #cfd6df;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.invitation-info {
+  padding: 12px;
+  border: 1px solid #dbe5f2;
+  border-radius: 4px;
+  background: #f7f9fc;
+  color: #536070;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (max-width: 620px) {
+  .users-heading-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
