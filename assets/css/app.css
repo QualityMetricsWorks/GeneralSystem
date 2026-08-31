@@ -188,3 +188,136 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ============================================================
+   GUVEL v0.0.2.2 — User Actions
+   ============================================================ */
+
+.action-enabled {
+  cursor: pointer;
+  background: #fff;
+  color: #143980;
+  border-color: #143980;
+}
+
+.action-enabled:hover {
+  background: #f4f7fb;
+}
+
+.action-muted {
+  color: #98a2b3;
+}
+
+.user-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(20, 30, 45, .48);
+}
+
+.user-dialog {
+  width: min(100%, 480px);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #dfe4ec;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
+}
+
+.user-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 12px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.user-dialog-header h2 {
+  margin: 4px 0 4px;
+}
+
+.dialog-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #d7dce4;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#user-management-form {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+#user-management-form label {
+  display: grid;
+  gap: 7px;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#user-management-form select {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #cfd6df;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.user-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button {
+  border: 1px solid #143980;
+  background: #143980;
+  color: #fff;
+}
+
+.primary-button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.secondary-button {
+  border: 1px solid #cfd6df;
+  background: #fff;
+  color: #344054;
+}
+
+.user-action-message {
+  min-height: 18px;
+  font-size: 13px;
+  color: #667085;
+}
+
+.user-action-message.success {
+  color: #006732;
+}
+
+.user-action-message.error {
+  color: #a43b3b;
+}

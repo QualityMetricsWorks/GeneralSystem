@@ -72,3 +72,19 @@ New SQL:
 
 This release is READ-FIRST and does not yet create, invite, edit, activate,
 deactivate or delete users.
+
+
+## v0.0.2.2 — Controlled User Actions
+
+Adds controlled role and status actions to the Users module.
+
+New SQL:
+- `sql/07_user_actions.sql`
+- `sql/07a_user_actions_validation.sql`
+
+Supported:
+- Change role within permitted role hierarchy.
+- Activate user.
+- Deactivate user.
+
+Database authorization is authoritative.
