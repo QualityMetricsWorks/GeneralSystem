@@ -3,7 +3,7 @@
 // NEVER place a Supabase service_role key in this frontend.
 
 export const ENV = {
-  SUPABASE_URL: "https://YOUR_PROJECT.supabase.co",
-  SUPABASE_ANON_KEY: "YOUR_SUPABASE_ANON_KEY",
+  SUPABASE_URL: "https://ipcpnmpehqxstmrokycs.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_VepM93n0q2MQtzrtNeP3iQ_HRldC1b9",
   ROOT_DOMAIN: "guvelsystems.com"
 };
