@@ -34,3 +34,25 @@ This release freezes the proven core:
 
 The previously manual tenant-resolution RLS policy is now included in:
 `sql/04_tenant_resolution_rls.sql`
+
+
+## v0.0.2.0 — User Management Foundation
+
+This release establishes the Phase 2 architecture:
+
+- Official roles: Administrator, Manager, Supervisor, Guest
+- User lifecycle: invited, active, inactive
+- RBAC helper functions
+- User-management indexes
+- Administrator vs Manager responsibility boundary
+- Security rule: UI is not authorization
+
+Run the new migration:
+
+`sql/05_user_management_foundation.sql`
+
+Read before implementing the next UI version:
+
+- `docs/ROLE_PERMISSION_MATRIX.md`
+- `docs/USER_MANAGEMENT_ARCHITECTURE.md`
+- `docs/PHASE_2_ROADMAP.md`
