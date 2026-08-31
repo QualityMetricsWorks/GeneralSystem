@@ -19,3 +19,18 @@ Hostname → tenant slug → company → session → profile/company verificatio
 4. 03_rls.sql
 5. Create the first Auth user
 6. Run 05_bootstrap.sql
+
+
+## v0.0.1.3 — Golden Core Baseline
+
+This release freezes the proven core:
+- Custom development subdomain
+- Tenant detection
+- Active tenant resolution before login
+- Supabase authentication
+- Profile/company validation
+- Authorized portal shell
+- Logout
+
+The previously manual tenant-resolution RLS policy is now included in:
+`sql/04_tenant_resolution_rls.sql`
