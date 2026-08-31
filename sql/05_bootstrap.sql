@@ -1,24 +1,2 @@
--- GUVEL General System v0.0.1.1
--- INITIAL DEVELOPMENT ENVIRONMENT
---
--- 1) Create the initial administrator in Supabase Authentication.
--- 2) Copy that user's UUID.
--- 3) Replace the UUID below and run.
-
--- select public.bootstrap_company(
---   'GUVEL Development',
---   'GUVELDEV',
---   'development',
---   'PUT-AUTH-USER-UUID-HERE',
---   'Company Administrator',
---   'America/Monterrey'
--- );
-
--- Current environment:
--- https://development.guvelsystems.com
---
--- Future tenants follow the same architecture:
--- metricsworks -> https://metricsworks.guvelsystems.com
--- magna        -> https://magna.guvelsystems.com
---
--- Each dedicated subdomain resolves to companies.slug.
+-- First create the user in Supabase Authentication, then run:
+-- select public.bootstrap_company('Metrics Works','METRICS','metricsworks','PUT-USER-UUID-HERE','Company Administrator','America/Monterrey');

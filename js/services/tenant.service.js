@@ -1,13 +1,7 @@
 import { supabase } from "./supabase.js";
 import { ENV } from "../config/env.js";
 
-/**
- * GUVEL tenant rule:
- * <tenant>.guvelsystems.com
- *
- * development is a valid tenant during the current development phase.
- */
-export function getTenantFromHost(){
+export function getTenantFromHost() {
   const host = window.location.hostname.toLowerCase();
 
   if (host === "localhost" || host === "127.0.0.1") {
@@ -17,19 +11,25 @@ export function getTenantFromHost(){
   const suffix = "." + ENV.ROOT_DOMAIN.toLowerCase();
   if (!host.endsWith(suffix)) return null;
 
-  const prefix = host.slice(0, -suffix.length);
+  const slug = host.slice(0, -suffix.length);
+  if (!slug || slug.includes(".")) return null;
 
-  // One tenant label only:
-  // development.guvelsystems.com -> development
-  if (!prefix || prefix.includes(".")) return null;
-
-  return prefix;
+  return slug;
 }
 
-export async function resolveTenant(slug){
+/* Compatibility API expected by the existing bootstrap. */
+export function getTenant() {
+  return getTenantFromHost();
+}
+
+export async function resolveTenant(slug) {
+  if (!slug) {
+    throw new Error("No GUVEL environment was detected from the current URL.");
+  }
+
   const { data, error } = await supabase
     .from("companies")
-    .select("id,name,slug,code,timezone,status")
+    .select("id,name,slug,code,status,timezone")
     .eq("slug", slug)
     .eq("status", "active")
     .maybeSingle();
@@ -37,8 +37,12 @@ export async function resolveTenant(slug){
   if (error) throw error;
 
   if (!data) {
-    throw new Error(`No active GUVEL environment was found for "${slug}". Verify the company bootstrap.`);
+    throw new Error(`GUVEL environment "${slug}" was not found or is inactive.`);
   }
 
   return data;
+}
+
+export async function getResolvedTenant() {
+  return resolveTenant(getTenantFromHost());
 }
