@@ -56,3 +56,19 @@ Read before implementing the next UI version:
 - `docs/ROLE_PERMISSION_MATRIX.md`
 - `docs/USER_MANAGEMENT_ARCHITECTURE.md`
 - `docs/PHASE_2_ROADMAP.md`
+
+
+## v0.0.2.1 — Users Administration
+
+Adds the first functional Users module.
+
+New application files:
+- `js/services/users.service.js`
+- `js/modules/users/users.module.js`
+
+New SQL:
+- `sql/06_users_administration_read_model.sql`
+- `sql/06a_users_administration_validation.sql`
+
+This release is READ-FIRST and does not yet create, invite, edit, activate,
+deactivate or delete users.

@@ -1,6 +1,7 @@
 import { configured, supabase } from "../services/supabase.js";
 import { getTenant, resolveTenant } from "../services/tenant.service.js";
 import { loadIdentity } from "../services/identity.service.js";
+import { renderUsersModule } from "../modules/users/users.module.js";
 
 function fatal(message) {
   document.querySelector("#app").innerHTML = `
@@ -25,9 +26,21 @@ function shell(company, identity) {
     </div>`;
 
   document.querySelectorAll("[data-m]").forEach(button => {
-    button.onclick = () => {
-      document.querySelector("#module").innerHTML =
-        `<h1>${button.dataset.m}</h1><p class="muted">Independent module baseline.</p>`;
+    button.onclick = async () => {
+      const module = document.querySelector("#module");
+      const name = button.dataset.m;
+
+      document.querySelectorAll("[data-m]").forEach(item => {
+        item.classList.toggle("active", item === button);
+      });
+
+      if (name === "Users") {
+        await renderUsersModule(module, { company, identity });
+        return;
+      }
+
+      module.innerHTML =
+        `<h1>${name}</h1><p class="muted">Independent module baseline.</p>`;
     };
   });
 
