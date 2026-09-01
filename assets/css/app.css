@@ -359,3 +359,119 @@
     flex-wrap: wrap;
   }
 }
+/* =========================================
+   ACCOUNT ACTIVATION
+========================================= */
+
+.activation-page {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 24px;
+}
+
+
+.activation-card {
+  width: 100%;
+
+  max-width: 460px;
+
+  background: #ffffff;
+
+  border: 1px solid #d9dee7;
+
+  box-shadow:
+    0 16px 40px
+    rgba(0, 0, 0, 0.10);
+}
+
+
+.activation-brand {
+  padding: 32px;
+
+  border-bottom:
+    1px solid #e6e9ee;
+}
+
+
+.activation-logo {
+  font-size: 32px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  color: #143980;
+}
+
+
+.activation-subtitle {
+  margin-top: 6px;
+
+  font-size: 12px;
+
+  letter-spacing: 0.04em;
+
+  color: #6c7480;
+}
+
+
+.activation-content {
+  padding: 32px;
+}
+
+
+.activation-content h1 {
+  margin-top: 0;
+
+  font-size: 26px;
+
+  color: #1d2733;
+}
+
+
+.activation-description {
+  margin-bottom: 28px;
+
+  color: #667085;
+
+  line-height: 1.6;
+}
+
+
+.activation-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+
+.activation-message {
+  min-height: 20px;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+.activation-message.error {
+  color: #b42318;
+}
+
+
+.activation-message.success {
+  color: #006732;
+}
+
+
+.activation-button {
+  width: 100%;
+}
