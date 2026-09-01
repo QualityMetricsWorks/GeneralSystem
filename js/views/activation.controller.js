@@ -1,4 +1,4 @@
-import { supabase } from "../services/supabase.client.js";
+import { supabase } from "../services/supabase.js";
 
 export function initializeActivationController() {
 
