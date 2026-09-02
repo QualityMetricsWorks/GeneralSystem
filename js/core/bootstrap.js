@@ -2,6 +2,7 @@ import { configured, supabase } from "../services/supabase.js";
 import { getTenant, resolveTenant } from "../services/tenant.service.js";
 import { loadIdentity } from "../services/identity.service.js";
 import { renderUsersModule } from "../modules/users/users.module.js";
+import { renderSettingsModule } from "../modules/settings/settings.module.js";
 import { renderActivationView } from "../views/activation.view.js";
 import { initializeActivationController } from "../views/activation.controller.js";
 
@@ -52,6 +53,11 @@ function shell(company, identity) {
 
       if (name === "Users") {
         await renderUsersModule(module, { company, identity });
+        return;
+      }
+
+      if (name === "Settings") {
+        await renderSettingsModule(module, { company, identity });
         return;
       }
 

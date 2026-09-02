@@ -1,0 +1,4 @@
+-- GUVEL v0.0.2.5
+-- Company & Shift Management
+-- NOTE: Database migration was executed and validated in Supabase.
+-- Keep this file as the migration record for repository traceability.
