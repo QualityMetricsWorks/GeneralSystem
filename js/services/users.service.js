@@ -54,6 +54,30 @@ export async function inviteCompanyUser({
 }) {
 
   const {
+    data: sessionData,
+    error: sessionError
+  } = await supabase.auth.getSession();
+
+
+  console.log(
+    "GUVEL current session:",
+    sessionData.session
+  );
+
+
+  if (
+    sessionError ||
+    !sessionData.session
+  ) {
+
+    throw new Error(
+      "Your GUVEL session has expired. Please sign in again."
+    );
+
+  }
+
+
+  const {
     data,
     error
   } =
@@ -76,48 +100,7 @@ export async function inviteCompanyUser({
       error
     );
 
-
-    let detailedMessage =
-      error.message ||
-      "Unable to send invitation.";
-
-
-    try {
-
-      if (
-        error.context &&
-        typeof error.context.json ===
-          "function"
-      ) {
-
-        const body =
-          await error.context.json();
-
-
-        if (body?.error) {
-
-          detailedMessage =
-            body.error;
-
-        }
-
-      }
-
-    } catch (
-      responseParseError
-    ) {
-
-      console.warn(
-        "Unable to parse Edge Function error response:",
-        responseParseError
-      );
-
-    }
-
-
-    throw new Error(
-      detailedMessage
-    );
+    throw error;
 
   }
 
