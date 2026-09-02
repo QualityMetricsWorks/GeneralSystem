@@ -117,3 +117,41 @@ export async function inviteCompanyUser({
   return data;
 
 }
+
+export async function resendCompanyInvitation(userId) {
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError || !sessionData.session) {
+    throw new Error("Your GUVEL session has expired. Please sign in again.");
+  }
+
+  const { data, error } = await supabase.functions.invoke(
+    "resend-company-invitation",
+    { body: { user_id: userId } }
+  );
+
+  if (error) {
+    console.error("GUVEL resend invitation error:", error);
+    throw error;
+  }
+  if (data?.error) throw new Error(data.error);
+  return data;
+}
+
+export async function cancelCompanyInvitation(userId) {
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError || !sessionData.session) {
+    throw new Error("Your GUVEL session has expired. Please sign in again.");
+  }
+
+  const { data, error } = await supabase.functions.invoke(
+    "cancel-company-invitation",
+    { body: { user_id: userId } }
+  );
+
+  if (error) {
+    console.error("GUVEL cancel invitation error:", error);
+    throw error;
+  }
+  if (data?.error) throw new Error(data.error);
+  return data;
+}

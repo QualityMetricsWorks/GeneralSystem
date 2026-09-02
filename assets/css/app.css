@@ -475,3 +475,28 @@
 .activation-button {
   width: 100%;
 }
+
+/* ============================================================
+   GUVEL v0.0.2.4.1 — Invitation Reliability
+   ============================================================ */
+.invitation-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-danger {
+  cursor: pointer;
+  background: #fff;
+  color: #a43b3b;
+  border-color: #a43b3b;
+}
+
+.action-danger:hover {
+  background: #fff5f5;
+}
+
+.table-action:disabled {
+  opacity: .6;
+  cursor: wait;
+}

@@ -2,7 +2,9 @@ import {
   getCompanyUsers,
   updateCompanyUserRole,
   setCompanyUserStatus,
-  inviteCompanyUser
+  inviteCompanyUser,
+  resendCompanyInvitation,
+  cancelCompanyInvitation
 } from "../../services/users.service.js";
 
 const ROLE_LABELS = {
@@ -106,7 +108,12 @@ function renderRows(users, identity) {
         <td>${formatDate(user.created_at)}</td>
         <td>
           ${manageable
-            ? `<button class="table-action action-enabled" type="button" data-user-action="${escapeHtml(user.user_id)}">Manage</button>`
+            ? user.status === "invited"
+              ? `<div class="invitation-actions">
+                   <button class="table-action action-enabled" type="button" data-resend-invitation="${escapeHtml(user.user_id)}">Resend</button>
+                   <button class="table-action action-danger" type="button" data-cancel-invitation="${escapeHtml(user.user_id)}">Cancel</button>
+                 </div>`
+              : `<button class="table-action action-enabled" type="button" data-user-action="${escapeHtml(user.user_id)}">Manage</button>`
             : `<span class="action-muted">—</span>`
           }
         </td>
@@ -323,7 +330,7 @@ export async function renderUsersModule(container, { identity }) {
         </div>
         <div class="users-heading-actions">
           ${canInvite(identity) ? `<button id="invite-user-button" class="primary-button" type="button">Invite user</button>` : ""}
-          <div class="read-only-note">INVITATIONS · v0.0.2.3</div>
+          <div class="read-only-note">INVITATION RELIABILITY · v0.0.2.4.1</div>
         </div>
       </div>
 
@@ -403,6 +410,50 @@ export async function renderUsersModule(container, { identity }) {
             document.body.appendChild(dialog);
 
             dialog.addEventListener("user-updated", load, { once: true });
+          });
+        });
+
+        body.querySelectorAll("[data-resend-invitation]").forEach(button => {
+          button.addEventListener("click", async () => {
+            const user = users.find(item => item.user_id === button.dataset.resendInvitation);
+            if (!user) return;
+            if (!window.confirm(`Resend the invitation to ${user.email}? The previous invitation link will no longer be used.`)) return;
+
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = "Sending...";
+            try {
+              await resendCompanyInvitation(user.user_id);
+              alert(`A new invitation was sent to ${user.email}.`);
+              await load();
+            } catch (error) {
+              console.error(error);
+              alert(error.message || "Unable to resend invitation.");
+              button.disabled = false;
+              button.textContent = originalText;
+            }
+          });
+        });
+
+        body.querySelectorAll("[data-cancel-invitation]").forEach(button => {
+          button.addEventListener("click", async () => {
+            const user = users.find(item => item.user_id === button.dataset.cancelInvitation);
+            if (!user) return;
+            if (!window.confirm(`Cancel the pending invitation for ${user.email}? This action removes the pending account and cannot be undone.`)) return;
+
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = "Cancelling...";
+            try {
+              await cancelCompanyInvitation(user.user_id);
+              alert(`Invitation for ${user.email} was cancelled.`);
+              await load();
+            } catch (error) {
+              console.error(error);
+              alert(error.message || "Unable to cancel invitation.");
+              button.disabled = false;
+              button.textContent = originalText;
+            }
           });
         });
       }
