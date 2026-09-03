@@ -3,6 +3,7 @@ import { getTenant, resolveTenant } from "../services/tenant.service.js";
 import { loadIdentity } from "../services/identity.service.js";
 import { renderUsersModule } from "../modules/users/users.module.js";
 import { renderSettingsModule } from "../modules/settings/settings.module.js";
+import { renderCustomersModule, renderPartNumbersModule } from "../modules/master-data/master-data.module.js";
 import { renderActivationView } from "../views/activation.view.js";
 import { initializeActivationController } from "../views/activation.controller.js";
 
@@ -28,7 +29,7 @@ function showActivationError(message) {
 }
 
 function shell(company, identity) {
-  const modules = ["Dashboard", "Capture", "Data", "Catalog", "History", "Users", "Settings"];
+  const modules = ["Dashboard", "Capture", "Customers", "Part Numbers", "Catalog", "History", "Users", "Settings"];
   document.querySelector("#app").innerHTML = `
     <div class="shell">
       <aside class="side">
@@ -50,6 +51,16 @@ function shell(company, identity) {
       document.querySelectorAll("[data-m]").forEach(item => {
         item.classList.toggle("active", item === button);
       });
+
+      if (name === "Customers") {
+        await renderCustomersModule(module, { company, identity });
+        return;
+      }
+
+      if (name === "Part Numbers") {
+        await renderPartNumbersModule(module, { company, identity });
+        return;
+      }
 
       if (name === "Users") {
         await renderUsersModule(module, { company, identity });
