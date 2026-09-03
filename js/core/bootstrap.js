@@ -5,6 +5,7 @@ import { renderUsersModule } from "../modules/users/users.module.js";
 import { renderSettingsModule } from "../modules/settings/settings.module.js";
 import { renderCustomersModule, renderPartNumbersModule } from "../modules/master-data/master-data.module.js";
 import { renderMachinesModule } from "../modules/master-data/machines.module.js";
+import { renderProductionModule } from "../modules/production/production.module.js";
 import { renderActivationView } from "../views/activation.view.js";
 import { initializeActivationController } from "../views/activation.controller.js";
 
@@ -52,6 +53,11 @@ function shell(company, identity) {
       document.querySelectorAll("[data-m]").forEach(item => {
         item.classList.toggle("active", item === button);
       });
+
+      if (name === "Capture") {
+        await renderProductionModule(module, { company, identity });
+        return;
+      }
 
       if (name === "Customers") {
         await renderCustomersModule(module, { company, identity });

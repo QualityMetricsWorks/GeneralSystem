@@ -103,3 +103,7 @@ New server-side component:
 
 Important: deployment of the Edge Function is required before the Invite User
 button can successfully create users.
+
+
+## v0.0.2.8 CORRECTED
+Rebuilt archive after download failure. Production Capture includes explicit load/save error handling and uses the installed `production_records` schema.
