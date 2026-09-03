@@ -1,10 +1,14 @@
 import { supabase } from "./supabase.js";
 
-export async function getCompanyShifts() {
-  const { data, error } = await supabase
+export async function getCompanyShifts(companyId = null) {
+  let query = supabase
     .from("company_shifts")
-    .select("*")
-    .order("start_time", { ascending: true });
+    .select("id, company_id, name, code, start_time, end_time, is_active")
+    .eq("is_active", true);
+
+  if (companyId) query = query.eq("company_id", companyId);
+
+  const { data, error } = await query.order("start_time", { ascending: true });
   if (error) throw error;
   return data || [];
 }
